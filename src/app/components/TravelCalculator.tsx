@@ -77,7 +77,6 @@ const speeds = [
 ];
 
 export default function TravelCalculator() {
-    const { colors } = useTheme();
     const [selectedDestination, setSelectedDestination] = useState(destinations[0].id);
     const [selectedSpeed, setSelectedSpeed] = useState(speeds[0].id);
     const [travelTime, setTravelTime] = useState('');
@@ -140,135 +139,43 @@ export default function TravelCalculator() {
         calculateTravelTime();
     }, [selectedDestination, selectedSpeed]);
 
-    const containerStyle = {
-        maxWidth: '1200px',
-        margin: '0 auto',
-        padding: '0 1rem',
-    };
-
-    const resultCardStyle = {
-        backgroundColor: colors.surface,
-        border: `1px solid ${colors.border}`,
-        borderRadius: '1rem',
-        padding: '1.5rem',
-        textAlign: 'center' as const,
-        boxShadow: '0 4px 6px rgba(0, 0, 0, 0.1)',
-        marginBottom: '1.5rem',
-    };
-
-    const gridStyle = {
-        display: 'grid',
-        gridTemplateColumns: 'repeat(auto-fit, minmax(400px, 1fr))',
-        gap: '1.5rem',
-    };
-
-    const sectionStyle = {
-        backgroundColor: colors.surface,
-        border: `1px solid ${colors.border}`,
-        borderRadius: '1rem',
-        padding: '1.25rem',
-        boxShadow: '0 2px 4px rgba(0, 0, 0, 0.1)',
-    };
-
-    const titleStyle = {
-        fontSize: '1.125rem',
-        fontWeight: 'bold',
-        color: colors.text,
-        marginBottom: '1rem',
-    };
-
-    const listStyle = {
-        display: 'grid',
-        gridTemplateColumns: '1fr',
-        gap: '0.5rem',
-        maxHeight: '24rem',
-        overflowY: 'auto' as const,
-        overflowX: 'hidden' as const,
-    };
-
-    const getOptionStyle = (isSelected: boolean, accentColor: string) => ({
-        display: 'flex',
-        alignItems: 'center',
-        padding: '0.75rem',
-        borderRadius: '0.5rem',
-        cursor: 'pointer',
-        backgroundColor: isSelected ? `${accentColor}20` : colors.background,
-        border: `1px solid ${isSelected ? accentColor : 'transparent'}`,
-        transition: 'all 0.2s ease',
-    });
-
-    const getHoverStyle = (isSelected: boolean, accentColor: string) => ({
-        backgroundColor: isSelected ? `${accentColor}30` : `${colors.border}40`,
-    });
-
-    const iconStyle = (color: string) => ({
-        fontSize: '1.125rem',
-        marginRight: '0.75rem',
-        color: color,
-        flexShrink: 0,
-    });
-
-    const nameStyle = {
-        fontWeight: '500',
-        fontSize: '0.875rem',
-        color: colors.text,
-        overflow: 'hidden',
-        textOverflow: 'ellipsis',
-        whiteSpace: 'nowrap' as const,
-    };
-
-    const detailStyle = {
-        fontSize: '0.75rem',
-        color: colors.textSecondary,
-    };
-
     return (
-        <div style={containerStyle}>
-            {/* Travel Time Result */}
+        <div className="travel-container">
             <motion.div
                 initial={{ opacity: 0, scale: 0.9 }}
                 animate={{ opacity: 1, scale: 1 }}
                 transition={{ duration: 0.5 }}
-                style={resultCardStyle}
+                className="result-card"
             >
-                <h3 style={{ ...titleStyle, marginBottom: '0.75rem' }}>Travel Time</h3>
+                <h3 className="result-title">Travel Time</h3>
                 <motion.div
                     key={travelTime}
                     initial={{ opacity: 0, y: 20 }}
                     animate={{ opacity: 1, y: 0 }}
                     transition={{ duration: 0.3 }}
-                    style={{
-                        fontSize: 'clamp(1.5rem, 4vw, 2.5rem)',
-                        fontWeight: 'bold',
-                        backgroundImage: `linear-gradient(135deg, ${colors.primary}, ${colors.secondary})`,
-                        WebkitBackgroundClip: 'text',
-                        WebkitTextFillColor: 'transparent',
-                        backgroundClip: 'text',
-                    }}
+                    className="result-time"
                 >
                     {travelTime}
                 </motion.div>
             </motion.div>
 
-            <div style={gridStyle}>
-                {/* Destinations Section */}
+            <div className="grid">
                 <motion.div
                     initial={{ opacity: 0, y: 20 }}
                     animate={{ opacity: 1, y: 0 }}
                     transition={{ duration: 0.5, delay: 0.2 }}
-                    style={sectionStyle}
+                    className="section"
                 >
-                    <h2 style={titleStyle}>Choose Your Destination</h2>
-                    <div style={listStyle}>
+                    <h2 className="section-title">Choose Your Destination</h2>
+                    <div className="option-list">
                         {destinations.map((destination) => {
                             const IconComponent = destination.icon;
                             const isSelected = selectedDestination === destination.id;
                             return (
                                 <motion.label
                                     key={destination.id}
-                                    whileHover={getHoverStyle(isSelected, colors.primary)}
                                     whileTap={{ scale: 0.98 }}
-                                    style={getOptionStyle(isSelected, colors.primary)}
+                                    className={`option ${isSelected ? 'selected destination' : ''}`}
                                 >
                                     <input
                                         type="radio"
@@ -278,10 +185,10 @@ export default function TravelCalculator() {
                                         onChange={(e) => setSelectedDestination(e.target.value)}
                                         style={{ display: 'none' }}
                                     />
-                                    <IconComponent style={iconStyle(colors.primary)} />
-                                    <div style={{ minWidth: 0, flex: 1 }}>
-                                        <div style={nameStyle}>{destination.name}</div>
-                                        <div style={detailStyle}>
+                                    <IconComponent className="option-icon destination" />
+                                    <div className="option-content">
+                                        <div className="option-name">{destination.name}</div>
+                                        <div className="option-detail">
                                             {destination.distance.toLocaleString()} km
                                         </div>
                                     </div>
@@ -291,24 +198,22 @@ export default function TravelCalculator() {
                     </div>
                 </motion.div>
 
-                {/* Speeds Section */}
                 <motion.div
                     initial={{ opacity: 0, y: 20 }}
                     animate={{ opacity: 1, y: 0 }}
                     transition={{ duration: 0.5, delay: 0.4 }}
-                    style={sectionStyle}
+                    className="section"
                 >
-                    <h2 style={titleStyle}>Choose Your Speed</h2>
-                    <div style={listStyle}>
+                    <h2 className="section-title">Choose Your Speed</h2>
+                    <div className="option-list">
                         {speeds.map((speed) => {
                             const IconComponent = speed.icon;
                             const isSelected = selectedSpeed === speed.id;
                             return (
                                 <motion.label
                                     key={speed.id}
-                                    whileHover={getHoverStyle(isSelected, colors.success)}
                                     whileTap={{ scale: 0.98 }}
-                                    style={getOptionStyle(isSelected, colors.success)}
+                                    className={`option ${isSelected ? 'selected speed' : ''}`}
                                 >
                                     <input
                                         type="radio"
@@ -318,10 +223,10 @@ export default function TravelCalculator() {
                                         onChange={(e) => setSelectedSpeed(e.target.value)}
                                         style={{ display: 'none' }}
                                     />
-                                    <IconComponent style={iconStyle(colors.success)} />
-                                    <div style={{ minWidth: 0, flex: 1 }}>
-                                        <div style={nameStyle}>{speed.name}</div>
-                                        <div style={detailStyle}>
+                                    <IconComponent className="option-icon speed" />
+                                    <div className="option-content">
+                                        <div className="option-name">{speed.name}</div>
+                                        <div className="option-detail">
                                             {speed.speed === Infinity ? 'Instant' : `${speed.speed.toLocaleString()} km/h`}
                                         </div>
                                     </div>
